@@ -1,0 +1,50 @@
+body {
+    margin: 0;
+    background-image: url('/images/bg.png');
+    background-size: 100% auto;
+    background-attachment: fixed;
+    background-position: center;
+    overflow: hidden;
+}
+
+.hero-section {
+    position: relative;
+    padding-bottom: 300px;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+.hero-section .text-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.hero-section .text {
+    font-size: 75px;
+    color: black;
+    margin-right: 180px; /* Spasi antara tulisan */
+    margin-left: 190px;
+    text-align: center;
+    font-family: 'Nico Moji';
+    font-style: normal;
+}
+.center-box {
+    z-index: 1;
+}
+.overlay {
+    position: absolute;
+    width: 1550px;
+    height: 82px;
+    background: #9B8E98;
+    opacity: 0.5;
+    mix-blend-mode: screen;
+
+}
+
+header.hidden {
+    display: none;
+}
