@@ -176,7 +176,7 @@
         width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
-        
+
     }
 
     .wishlist-table th{
@@ -209,8 +209,8 @@
     }
 
     .remove-button img {
-        width: 40px; 
-        height: 40px; 
+        width: 40px;
+        height: 40px;
     }
 
     table {
@@ -223,8 +223,8 @@
         border: 1px solid #ddd;
         padding: 8px;
         text-align: center;
-        color: white; 
-        font-size: 18px; 
+        color: white;
+        font-size: 18px;
     }
 
     th {
@@ -245,7 +245,7 @@
         }
 
         .reset-btn:hover {
-            background-color: darkred; 
+            background-color: darkred;
         }
 
 
@@ -316,7 +316,7 @@ function showContent(contentType) {
             '<tbody id="orderDetailsBody">' +
             '</tbody>' +
             '</table>'+
-            '<button class="reset-btn" onclick="resetOrderHistory()">Reset History</button>'; 
+            '<button class="reset-btn" onclick="resetOrderHistory()">Reset History</button>';
 
         const orderHistoryData = JSON.parse(localStorage.getItem('orderHistory')) || [];
 
@@ -329,11 +329,11 @@ function showContent(contentType) {
                 `<td>${order.orderTime}</td>` +
                 `<td>${order.totalQuantity}</td>` +
                 `<td>${order.subtotal}</td>` +
-                `<td>Processing</td>`;
+                `<td>Successfully</td>`;
         });
 
         if (orderHistoryData.length === 0) {
-            contentDiv.innerHTML += '<p>No order history available.</p>';
+
         }
     } else if (contentType === 'wishlist') {
             contentDiv.innerHTML = '';
@@ -373,7 +373,6 @@ function showContent(contentType) {
                 '</select>' +
 
                 '<button onclick="submitPersonalDetails()">Save Changes</button>' +
-                '<button onclick="enableEdit()">Edit All</button>' +
                 '</div>';
                 contentDiv.appendChild(separator);
               }
@@ -458,15 +457,14 @@ function showContent(contentType) {
         `<td>${orderDetails.orderTime}</td>` +
         `<td>${orderDetails.totalQuantity}</td>` +
         `<td>${orderDetails.subtotal}</td>` +
-        `<td>Processing</td>`;
+        `<td>Successfully</td>`;
 
-   
-    const orderHistoryData = JSON.parse(localStorage.getItem('orderHistory')) || [];
-    orderHistoryData.push(orderDetails);
-    localStorage.setItem('orderHistory', JSON.stringify(orderHistoryData));
-} else {
-    showContent('');
-}
+        const orderHistoryData = JSON.parse(localStorage.getItem('orderHistory')) || [];
+        orderHistoryData.push(orderDetails);
+        localStorage.setItem('orderHistory', JSON.stringify(orderHistoryData));
+    } else {
+        showContent('');
+    }
 
     function removeFromWishlist(itemName) {
         let wishlistData = JSON.parse(localStorage.getItem('wishlist')) || [];
@@ -487,23 +485,6 @@ function showContent(contentType) {
             console.log("Username:", username);
             console.log("Gender:", gender);
     }
-    function toggleEdit(field) {
-        const displayElement = document.getElementById(`${field}Display`);
-        const inputElement = document.getElementById(field);
-        displayElement.style.display = displayElement.style.display === 'none' ? 'inline' : 'none';
-        inputElement.style.display = inputElement.style.display === 'none' ? 'inline' : 'none';
-    }
-    function enableEdit() {
-        const editableElements = document.querySelectorAll('.editable');
-        const inputElements = document.querySelectorAll('.form-container input');
-        editableElements.forEach(element => {
-            element.style.display = 'inline';
-        });
-        inputElements.forEach(input => {
-            input.style.display = 'inline';
-        });
-    }
-
 
 </script>
 
