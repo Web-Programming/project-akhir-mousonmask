@@ -1,6 +1,7 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
+    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -201,6 +202,29 @@
             height: 40px;
         }
 
+        #add-icon {
+            position: fixed;
+            bottom: 20px;
+            left : 10px;
+            width: 80px;
+            height: 80px;
+            background-color: #DFD7D7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        #add-icon img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: block; 
+        margin: 18px 0 0 20px;
+        }   
+
         .quantity-container {
             display: flex;
             align-items: center;
@@ -279,201 +303,108 @@
             <input type="text" placeholder="Search...">
         </div>
 
-    </div>
-    <div class="menu-list" id="menu-list">
+        @foreach ($menus as $item)
+</div>
+<div class="menu-list" id="menu-list">
+    
+</div>
+@method('add')
+@csrf
+@can('add', $item)
+    <a href="{{ url('menu/create') }}" id="add-icon">
+        <img src="icons/add-icon.jpg" alt="Add Menu">
+    </a>
+@endcan
+@endforeach
 
-    </div>
+
     <div id="cart-icon" onclick="navigateToOrder()">
         <img src="icons/cart-icon.png" alt="Add to Cart Icon">
-    </div>
+    </div> 
 
     <script>
-        let selectedItems = [];
-        function showMenu(category) {
-            const menuData = {
-                'snack': [
-                    { name: 'Torilla with Bolognese and Cheese', price: '$2.99', image: 'https://tse3.mm.bing.net/th?id=OIP.CiuAgf6j3D1taLtQ3EzN9AHaFj&pid=Api&P=0&h=180' },
-                    { name: 'Fried Wonton with Sour Spicy Sauce', price: '$2.69', image: 'https://tse2.mm.bing.net/th?id=OIP.afwIXrNiJKbVLbfHTMGFHQHaJ4&pid=Api&P=0&h=180' },
-                    { name: 'Potato Sticks with Dipping Sauce', price: '$2.00', image: 'https://tse4.mm.bing.net/th?id=OIP.G0-VSkKoFW5BHHlmbWBKBwHaFP&pid=Api&P=0&h=180'},
-                    { name: 'Popcorn Chicken', price: '$3.00', image: 'https://tse4.mm.bing.net/th?id=OIP.yi3uQb4_pdGvgoLxT9vpjAHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Spicy Honey Chicken Wings', price: '$3.22', image: 'https://tse2.mm.bing.net/th?id=OIP.XmbsOTbH3m-zM6Rpx80HgAHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Banana Turon with Caramel', price: '$1.69', image: 'https://tse2.mm.bing.net/th?id=OIP.c6VRUTOCpyAC_6coVwn-DwHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Loaded Nachos with Chicken Mayo', price: '$2.35', image: 'https://tse1.mm.bing.net/th?id=OIP.p5z4FtE-LH__3jXheaCV6QHaH5&pid=Api&P=0&h=180' },
-                    { name: 'Garlic Cheese Bread', price: '$2.10', image: 'https://tse3.mm.bing.net/th?id=OIP.DXIj4r5NEb72P0smgNGMigHaFF&pid=Api&P=0&h=180' }
-                ],
-                'appetizer': [
-                    { name: 'Artisan Cheese Plate', price: '$15.00', image: 'https://tse3.mm.bing.net/th?id=OIP.yj0lsGkIN5QtZi3Jo9rc7wHaGR&pid=Api&P=0&h=180' },
-                    { name: 'Bruschetta', price: '$8.00', image: 'https://tse4.mm.bing.net/th?id=OIP.4-aDQrUwyM6B6vxTZrXAJAHaEz&pid=Api&P=0&h=180' },
-                    { name: 'Caesar Salad', price: '$5.12', image: 'https://tse4.mm.bing.net/th?id=OIP.QmHw_37gNHByVUGMekg3awHaHa&pid=Api&P=0&h=180g' },
-                    { name: 'Shrimp Cocktail', price: '$10.00', image: 'https://tse2.mm.bing.net/th?id=OIP.R3QKd3XafMBUMH_tktFQEgHaE8&pid=Api&P=0&h=180' },
-                    { name: 'Caprese Skewers', price: '$7.50', image: 'https://tse1.mm.bing.net/th?id=OIP.7cIwTBHkkYJt2JSFHib3UAHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Spinach and Artichoke Dip', price: '$9.00', image: 'https://tse4.mm.bing.net/th?id=OIP._C5NTz1y153qrsJmiDeKNgHaFC&pid=Api&P=0&h=180' },
-                    { name: 'Stuffed Mushrooms', price: '$6.35', image: 'https://tse3.mm.bing.net/th?id=OIP.8CyOKwbqSKXZwsPSPLO6EgHaE8&pid=Api&P=0&h=180g' },
-                    { name: 'Deviled Eggs', price: '$7.10', image: 'https://tse4.mm.bing.net/th?id=OIP.QUZ0--hojQe1OV40SJlBDgHaE8&pid=Api&P=0&h=180' }
-                ],
-                'alcohol': [
-                    { name: 'Martini', price: '$12.00', image: 'https://tse1.mm.bing.net/th?id=OIP.3ZV0fYQZbEmRY2y8yehM1wHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Margarita', price: '$8.50', image: 'https://tse3.mm.bing.net/th?id=OIP.Zljihe1OVdpMs8JO5C0C_AHaE8&pid=Api&P=0&h=180' },
-                    { name: 'Old Fashioned', price: '$12.50', image: 'https://tse1.mm.bing.net/th?id=OIP.STfR97mTboXVcMYRVhHMfAHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Mojito', price: '$11.45', image: 'https://tse2.mm.bing.net/th?id=OIP._Zeuj-mSku2-dVCgVaEDMAHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Craft Beer (pint)', price: '$6.50', image: 'https://tse2.mm.bing.net/th?id=OIP.lg2YFtzLZx8pz8Jx0q6qsAHaEm&pid=Api&P=0&h=180' },
-                    { name: 'Wine by the Glass', price: '$13.20', image: 'https://tse2.mm.bing.net/th?id=OIP.fE_O2ERZDAeMVIBZijFAjQHaE8&pid=Api&P=0&h=180' },
-                    { name: 'Whiskey Sour', price: '$14.00', image: 'https://tse1.mm.bing.net/th?id=OIP.-qaun2STZ7J1C9q1RADaBwHaE8&pid=Api&P=0&h=180' },
-                    { name: 'Cosmopolitan', price: '$16.20', image: 'https://tse4.mm.bing.net/th?id=OIP.GNomUD5tyfXSJ4MHRC0qJQHaHa&pid=Api&P=0&h=180' }
-                ],
-                'nonAlcohol': [
-                    { name: 'Lemonade', price: '$3.99', image: 'https://tse2.mm.bing.net/th?id=OIP.O4-BlwnK5XddkVPnAKuEVQHaE8&pid=Api&P=0&h=180' },
-                    { name: 'Virgin Mojito', price: '$7.00', image: 'https://tse2.mm.bing.net/th?id=OIP.srPfMqNzMSam8jw0JpYnEQHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Shirley Temple', price: '$4.00', image: 'https://tse1.mm.bing.net/th?id=OIP.M8OS8YtsYUVzT738-yKeLAHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Iced Tea', price: '$3.00', image: 'https://tse2.mm.bing.net/th?id=OIP.E_gCRT8XQRVS_WM6U8oLTgHaFj&pid=Api&P=0&h=180' },
-                    { name: 'Soda (per can)', price: '$3.00', image: 'https://tse4.mm.bing.net/th?id=OIP.HuiZ0wKn4fJzdUo9nFpqOQHaFj&pid=Api&P=0&h=180' },
-                    { name: 'Mocktail (non-alcoholic)', price: '$7.69', image: 'https://tse1.mm.bing.net/th?id=OIP.i6Po_-gOp0NXSJXIhA_ODQHaJ9&pid=Api&P=0&h=180' },
-                    { name: 'Brewed Coffee', price: '$5.35', image: 'https://tse1.mm.bing.net/th?id=OIP.gyi2811SPA3O1YcuPtJiSwHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Matchless Coffee', price: '$6.10', image: 'https://tse1.mm.bing.net/th?id=OIP.7UntTq1JqkCiTLMEB-IwvwHaE8&pid=Api&P=0&h=180' }
-                ],
-                'dessert': [
-                    { name: 'Chocolate Lava Cake', price: '$12.50', image: 'https://tse4.mm.bing.net/th?id=OIP.UqPA6l0j5zEUC34D2WyFpAHaJw&pid=Api&P=0&h=180' },
-                    { name: 'Cheesecake (slice)', price: '$10.99', image: 'https://tse1.mm.bing.net/th?id=OIP.S-q_0M8EpT3xB4SviRG9tAHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Tiramisu', price: '$14.00', image: 'https://tse2.mm.bing.net/th?id=OIP.g6OCL5qbY-Nnp-jUe3qzeQHaE7&pid=Api&P=0&h=180' },
-                    { name: 'Apple Pie (slice)', price: '$5.20', image: 'https://tse4.mm.bing.net/th?id=OIP.DuFc4e9W7H6789dtveuQcQHaE8&pid=Api&P=0&h=180' },
-                    { name: 'Crème Brûlée', price: '$13.22', image: 'https://tse4.mm.bing.net/th?id=OIP.1Xc5cFVVnIY6b-rACqGqeQHaE7&pid=Api&P=0&h=180' },
-                    { name: 'Brownie Sundae', price: '$14.60', image: 'https://tse3.mm.bing.net/th?id=OIP.TxM8wBI4P8J-EBGZaK8a6wHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Key Lime Pie (slice)', price: '$9.35', image: 'https://tse2.mm.bing.net/th?id=OIP.9vdkk310qAFXV-o3B__CcwHaHa&pid=Api&P=0&h=180' },
-                    { name: 'Strawberry Shortcake', price: '$8.10', image: 'https://tse2.mm.bing.net/th?id=OIP.XMYMOFgxzRkPuAoWLF7dCwHaHa&pid=Api&P=0&h=180' }
-                ]
-            };
+        const menuData = @json($menus);
+        const selectedItems = JSON.parse(localStorage.getItem('wishlist')) || [];
 
+        document.addEventListener('DOMContentLoaded', function () {
+            const defaultCategory = 'appetizer';
+            showMenu(defaultCategory);
+        });
+
+        function showMenu(category) {
             const menuList = document.getElementById('menu-list');
             menuList.innerHTML = '';
 
             const searchInput = document.querySelector('.search input');
             const searchTerm = searchInput.value.toLowerCase();
-            
-           
-                menuData[category].forEach(item => {
-                    if (item.name.toLowerCase().includes(searchTerm) || searchTerm === '') {
-                        const card = document.createElement('div');
-                        card.classList.add('menu-card');
 
-                        const image = document.createElement('img');
-                        image.src = item.image;
-                        card.appendChild(image);
+            menuData.forEach(item => {
+                if (item.category === category && (item.nama_menu.toLowerCase().includes(searchTerm) || searchTerm === '')) {
+                    const card = document.createElement('div');
+                    card.classList.add('menu-card');
 
-                        const content = document.createElement('div');
-                        content.classList.add('menu-card-content');
+                    const image = document.createElement('img');
+                    image.src = item.foto;
+                    card.appendChild(image);
 
-                        const itemName = document.createElement('h3');
-                        itemName.textContent = item.name;
-                        content.appendChild(itemName);
+                    const content = document.createElement('div');
+                    content.classList.add('menu-card-content');
 
-                        const itemPrice = document.createElement('p');
-                        itemPrice.textContent = `Price: ${item.price}`;
-                        content.appendChild(itemPrice);
+                    const itemName = document.createElement('h3');
+                    itemName.textContent = item.nama_menu;
+                    content.appendChild(itemName);
 
-                        const quantityContainer = document.createElement('div');
-                        quantityContainer.classList.add('quantity-container');
+                    const itemPrice = document.createElement('p');
+                    itemPrice.textContent = `Price: $${item.harga}`;
+                    content.appendChild(itemPrice);
 
-                        const minusButton = document.createElement('button');
-                        minusButton.textContent = '-';
-                        minusButton.addEventListener('click', function () {
-                            updateQuantity(-1, quantityDisplay);
-                        });
-                        quantityContainer.appendChild(minusButton);
+                    const quantityContainer = document.createElement('div');
+                    quantityContainer.classList.add('quantity-container');
 
-                        const quantityDisplay = document.createElement('span');
-                        quantityDisplay.textContent = '0';
-                        quantityContainer.appendChild(quantityDisplay);
+                    const minusButton = document.createElement('button');
+                    minusButton.textContent = '-';
+                    minusButton.addEventListener('click', function () {
+                        updateQuantity(-1, quantityDisplay);
+                    });
+                    quantityContainer.appendChild(minusButton);
 
-                        const plusButton = document.createElement('button');
-                        plusButton.textContent = '+';
-                        plusButton.addEventListener('click', function () {
-                            updateQuantity(1, quantityDisplay);
-                        });
-                        quantityContainer.appendChild(plusButton);
+                    const quantityDisplay = document.createElement('span');
+                    quantityDisplay.textContent = '0';
+                    quantityContainer.appendChild(quantityDisplay);
 
-                        content.appendChild(quantityContainer);
+                    const plusButton = document.createElement('button');
+                    plusButton.textContent = '+';
+                    plusButton.addEventListener('click', function () {
+                        updateQuantity(1, quantityDisplay);
+                    });
+                    quantityContainer.appendChild(plusButton);
 
-                        const addToCartButton = document.createElement('button');
-                        addToCartButton.textContent = 'Add to Cart';
-                        addToCartButton.addEventListener('click', function () {
-                            addToCart(item.name, item.price, quantityDisplay.innerText);
-                        });
-                        content.appendChild(addToCartButton);
+                    content.appendChild(quantityContainer);
 
-                        const addToWishlistButton = document.createElement('i');
-                        addToWishlistButton.innerHTML = '<i class="fas fa-heart"></i>';
-                        addToWishlistButton.classList.add('love-icon');
-                        addToWishlistButton.setAttribute('data-name', item.name, 'data-price', item.price, 'data-image', item.image);
-                        addToWishlistButton.addEventListener('click', function () {
-                            addToWishlist(item.name, item.price, item.image);
-                        });
-                        content.appendChild(addToWishlistButton);
+                    const addToCartButton = document.createElement('button');
+                    addToCartButton.textContent = 'Add to Cart';
+                    addToCartButton.addEventListener('click', function () {
+                        addToCart(item.nama_menu, item.harga, quantityDisplay.innerText);
+                    });
+                    content.appendChild(addToCartButton);
 
-                        card.appendChild(content);
+                    const addToWishlistButton = document.createElement('i');
+                    addToWishlistButton.innerHTML = '<i class="fas fa-heart"></i>';
+                    addToWishlistButton.classList.add('love-icon');
+                    addToWishlistButton.setAttribute('data-name', item.nama_menu);
+                    addToWishlistButton.setAttribute('data-price', item.harga);
+                    addToWishlistButton.setAttribute('data-image', item.foto);
+                    addToWishlistButton.addEventListener('click', function () {
+                        addToWishlist(item.nama_menu, item.harga, item.foto);
+                    });
+                    content.appendChild(addToWishlistButton);
 
-                        menuList.appendChild(card);
-                    }
-                });
-            
+                    card.appendChild(content);
 
-           
-            document.querySelectorAll('.menu-options a').forEach(link => {
-                link.classList.remove('active');
+                    menuList.appendChild(card);
+                }
             });
-
-           
-            const activeLink = document.querySelector(`.menu-options a[href="#"][onclick="showMenu('${category}')"]`);
-            activeLink.classList.add('active');
-
-            
-            menuList.classList.add('slide-out');
-
-           
-            setTimeout(() => {
-                menuData[category].forEach(item => {
-                });
-
-                menuList.classList.remove('slide-out');
-                menuList.classList.add('slide-in');
-            }, 500);
         }
-
-        function navigateToOrder() {
-            const selectedItemsJSON = JSON.stringify(selectedItems);
-            localStorage.setItem('selectedItems', selectedItemsJSON);
-            window.location.href = 'order';
-        }
-
-        function addToCart(itemName, itemPrice, quantity) {
-            if (parseInt(quantity, 10) === 0) {
-                alert('Harap pilih jumlah item lebih dari 0');
-                return;
-            }
-
-            selectedItems.push({
-                name: itemName,
-                price: parseFloat(itemPrice.replace('$', '')),
-                quantity: parseInt(quantity, 10),
-            });
-
-            localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
-
-            alert(`Added to Cart:\n${itemName}\nPrice: ${itemPrice}\nQuantity: ${quantity}`);
-        }
-
-        document.querySelector('.search input').addEventListener('input', function () {
-            const category = 'snack';
-            showMenu(category);
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const defaultCategory = 'appetizer';
-            showMenu(defaultCategory);
-
-            const menuOptions = document.getElementById('menu-options');
-            const activeLink = menuOptions.querySelector(`a[href="#"][onclick="showMenu('${defaultCategory}')"]`);
-            activeLink.classList.add('active');
-        });
 
         function updateQuantity(change, display) {
             let quantity = parseInt(display.innerText, 10);
@@ -481,29 +412,50 @@
             display.innerText = quantity;
         }
 
+        function addToCart(itemName, itemPrice, quantity) {
+            if (parseInt(quantity, 10) === 0) {
+                alert('Please select a quantity greater than 0');
+                return;
+            }
+
+            const cartItem = {
+                name: itemName,
+                price: parseFloat(itemPrice.replace('$', '')),
+                quantity: parseInt(quantity, 10),
+            };
+
+            // Assume you have a global cart array
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push(cartItem);
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            alert(`Added to Cart:\n${itemName}\nPrice: ${itemPrice}\nQuantity: ${quantity}`);
+        }
+
         function addToWishlist(itemName, itemPrice, itemImage) {
             const existingItem = selectedItems.find(item => item.name === itemName);
 
             if (existingItem) {
-                
+                // Remove item from wishlist
                 const index = selectedItems.indexOf(existingItem);
                 selectedItems.splice(index, 1);
 
-               
+                // Update love icons
                 const loveIcons = document.querySelectorAll(`.love-icon[data-name="${itemName}"]`);
                 loveIcons.forEach(icon => {
                     icon.classList.remove('liked');
                 });
             } else {
-                
-                selectedItems.push({
+                // Add item to wishlist
+                const wishlistItem = {
                     name: itemName,
                     price: parseFloat(itemPrice.replace('$', '')),
-                    image: itemImage, 
+                    image: itemImage,
                     quantity: 1,
-                });
+                };
+                selectedItems.push(wishlistItem);
 
-                
+                // Update love icons
                 const loveIcons = document.querySelectorAll(`.love-icon[data-name="${itemName}"]`);
                 loveIcons.forEach(icon => {
                     icon.classList.add('liked');
@@ -513,7 +465,33 @@
             localStorage.setItem('wishlist', JSON.stringify(selectedItems));
         }
 
+        // Event listener for the search input
+        document.querySelector('.search input').addEventListener('input', function () {
+            const category = 'snack';
+            showMenu(category);
+        });
 
-</script>
+        // Initial setup on DOMContentLoaded
+        document.addEventListener('DOMContentLoaded', function () {
+            const defaultCategory = 'appetizer';
+            showMenu(defaultCategory);
+
+            const menuOptions = document.getElementById('menu-options');
+            const activeLink = menuOptions.querySelector(`a[onclick="showMenu('${defaultCategory}')"]`);
+            activeLink.classList.add('active');
+        });
+
+        // Function to navigate to the order page
+        function navigateToOrder() {
+            const selectedItemsJSON = JSON.stringify(selectedItems);
+            localStorage.setItem('selectedItems', selectedItemsJSON);
+            window.location.href = 'order';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const addIcon = document.getElementById('add-icon');
+
+    });
+        </script>
 </body>
 </html>

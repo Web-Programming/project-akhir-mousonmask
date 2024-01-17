@@ -24,9 +24,26 @@
                 </div>
 
         <!-- Email Address -->
+        <div class="form-group">
+                                        @error('login_gagal')
+                                            {{-- <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span> --}}
+                                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                {{-- <span class="alert-inner--icon"><i class="ni ni-like-2"></i></span> --}}
+                                                <span class="alert-inner--text"><strong>Warning!</strong>  {{ $message }}</span>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            @enderror
         <div class="input-container">
-            <x-text-input id="email"  type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="Username"/>
-            <x-input-error :messages="$errors->get('email')" class="error" />
+            <x-text-input id="email"  type="email" name="email" :value="old('email')" 
+            required autofocus autocomplete="username" 
+            placeholder="Username"/>
+            @if($errors->has('username'))
+                                        <span class="error">{{ $errors->first('username') }}</span>
+                                        @endif
         </div>
 
         <!-- Password -->
@@ -37,7 +54,9 @@
                             placeholder="Password"
                             required autocomplete="current-password" />
 
-            <x-input-error :messages="$errors->get('password')" class="error" />
+                            @if($errors->has('password'))
+                                        <span class="error">{{ $errors->first('password') }}</span>
+                                        @endif
                 <span class="password-icon" onclick="togglePassword('password')"></span>
         </div>
 
@@ -49,9 +68,7 @@
             </label>
         </div>
 
-        <button type="submit">
-            {{ __('Log in') }}
-        </button>
+        <button class="btn w-100 btn-primary btn-block btn-login" type="submit">Login</button>
 
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))

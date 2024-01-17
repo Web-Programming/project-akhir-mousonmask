@@ -33,4 +33,9 @@ class Menu extends Model
         'price',
         'image',
     ];
+
+    public function wishlist()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 }

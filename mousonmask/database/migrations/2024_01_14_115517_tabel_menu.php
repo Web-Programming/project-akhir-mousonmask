@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('nama_menu', 100);
             $table->decimal('harga', 10, 2);
             $table->string('foto');
+            $table->string('category'); // Add this line for the category column
             $table->timestamps();
         });
     }

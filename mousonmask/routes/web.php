@@ -29,6 +29,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+      Route::get('/myacc', [MyAccController::class, 'index'])->name('myacc.index');
+    Route::post('/myacc/wishlist/add/{menuId}', [MyAccController::class, 'addToWishlist'])->name('myacc.wishlist.add');
+    Route::delete('/myacc/wishlist/remove/{menuId}', [MyAccController::class, 'removeFromWishlist'])->name('myacc.wishlist.remove');
+
 });
 
 require __DIR__.'/auth.php';
@@ -38,15 +43,23 @@ Route::get('/dashboard', function () {
     return view('home');
 })->name('home');
 
+Route::middleware(['auth', 'Cek_Login:admin'])->group(function () {
+    Route::get('/home', [UserController::class, 'admin']);
+});
+
+Route::middleware(['auth', 'Cek_Login:user'])->group(function () {
+    Route::get('/home', [UserController::class, 'user']);
+});
+
 
 Route::get('/home', function () {
     return view('home');
 })->name('home');
 
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+// Route::get('/login', function () {
+//     return view('auth.login');
+// })->name('login');
 
 Route::get('/register', function () {
     return view('auth.register');
@@ -80,17 +93,17 @@ Route::get('/contact', function () {
 //     return view('menu');
 // })->name('menu');
 
-Route::get('/order', function () {
-    return view('order');
-})->name('order');
+// Route::get('/order', function () {
+//     return view('order');
+// })->name('order');
 
 Route::get('/payment', function(){
     return view('payment');
 })->name('payment');
 
-Route::get('/myacc', function () {
-    return view('myacc');
-})->name('myacc');
+// Route::get('/myacc', function () {
+//     return view('myacc');
+// })->name('myacc');
 
 Route::get('/home', function () {
     return view('home');
@@ -98,9 +111,20 @@ Route::get('/home', function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/myacc', [MyAccController::class, 'showWishlist'])->name('myacc.show');
-Route::post('/wishlist/add/{menuId}', [MyAccController::class, 'addToWishlist'])->name('wishlist.add');
-Route::post('/wishlist/remove/{menuId}', [MyAccController::class, 'removeFromWishlist'])->name('wishlist.remove');
+// Route::get('/myacc', [MyAccController::class, 'addToWishlist'])->name('myacc.show');
+
+
+// Route::post('/wishlist/add/{menuId}', [MyAccController::class, 'addToWishlist'])->name('wishlist.add');
+// Route::post('/wishlist/remove/{menuId}', [MyAccController::class, 'removeFromWishlist'])->name('wishlist.remove');
+
+
+Route::resource('/menu', MenuController::class)->middleware(['auth','verified']);
+
+Route::middleware('auth')->group(function () {
+    Route::get('/myacc', [MyAccController::class, 'index'])->name('myacc.index');
+    Route::post('/myacc/wishlist/add/{menuId}', [MyAccController::class, 'addToWishlist'])->name('myacc.wishlist.add');
+    Route::delete('/myacc/wishlist/remove/{menuId}', [MyAccController::class, 'removeFromWishlist'])->name('myacc.wishlist.remove');
+});
 
 Route::resource('/home', HomeController::class)->middleware(['auth','verified']);
 Route::resource('/menu', MenuController::class)->middleware(['auth','verified']);

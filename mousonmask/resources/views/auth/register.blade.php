@@ -24,13 +24,17 @@
         <!-- Name -->
         <div class="input-container">
             <x-text-input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Username"/>
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            @if ($errors->has('name'))
+                                          <span class="error"> * {{ $errors->first('name') }}</span>
+                                          @endif
         </div>
 
         <!-- Email Address -->
         <div class="input-container">
             <x-text-input id="email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="Email Address"/>
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            @if ($errors->has('email'))
+                                          <span class="error">* {{ $errors->first('email') }}</span>
+                                        @endif
         </div>
 
         <!-- Password -->
@@ -41,7 +45,9 @@
                             placeholder="Password"
                             required autocomplete="new-password" />
                             <span class="password-icon" onclick="togglePassword('password')"></span>
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                            @if ($errors->has('password'))
+                                          <span class="error">* {{ $errors->first('password') }}</span>
+                                        @endif
         </div>
 
         <!-- Confirm Password -->
@@ -52,11 +58,13 @@
                             placeholder="Confirm Password"
                             required autocomplete="new-password" />
             <span class="password-icon" onclick="togglePassword('confirm_password')"></span>
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            @if ($errors->has('password'))
+                                          <span class="error">* {{ $errors->first('password_confirmation') }}</span>
+                                        @endif
         </div>
-            <button type="submit">
-                {{ __('Sign Up') }}
-            </button>
+           <div class="form-group mt-4 mb-0">
+                                        <button class="btn btn-primary btn-block" type="submit">Daftar!</button>
+                                    </div>
         </div>
         <div class="or">Or Sign Up with</div>
         <div class="social-buttons">
@@ -70,19 +78,7 @@
     </div>
 
     <script>
-        function togglePassword(id) {
-            var input = document.getElementById(id);
-            var icon = document.getElementById("icon_" + id);
-
-            if (input.type === "password") {
-                input.type = "password";
-                icon.innerHTML = "&#x1F576;"; 
-            } else {
-                input.type = "text";
-                icon.innerHTML = "&#x1F441;";
-            }
-        }
-
+        
         function navigateTo(page) {
             switch (page) {
                 case 'google':
